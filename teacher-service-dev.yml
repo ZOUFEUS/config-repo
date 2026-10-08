@@ -1,3 +1,4 @@
 campus:
   environment: dev
-  message: "Portail enseignants DEV"
+  release: r2
+  message: "Portail enseignants DEV - version 2"
