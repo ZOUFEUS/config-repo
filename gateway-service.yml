@@ -17,4 +17,28 @@ spring:
                 - Path=/campus/api/teachers/**
               filters:
                 - StripPrefix=1
+                - name: CircuitBreaker
+                  args:
+                    name: teacherCircuitBreaker
+                    fallbackUri: forward:/fallback/teachers
+                    statusCodes:
+                      - 500
+                      - 502
+                      - 503
+                      - 504
                 - AddResponseHeader=X-Gateway, gateway-service
+
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        slidingWindowType: COUNT_BASED
+        slidingWindowSize: 5
+        minimumNumberOfCalls: 5
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10s
+        permittedNumberOfCallsInHalfOpenState: 3
+  timelimiter:
+    instances:
+      teacherCircuitBreaker:
+        timeoutDuration: 2s
